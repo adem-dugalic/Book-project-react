@@ -15,7 +15,7 @@ import { useEffect, useState } from "react";
 
 function App() {
   const [isUser, setIsUser] = useState(true);
-  const token = localStorage.getItem("user");
+  let token = localStorage.getItem("user");
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -27,7 +27,7 @@ function App() {
     console.log("Decoded Token", decodedToken);
     let currentDate = new Date();
 
-    // JWT exp is in seconds
+    //JWT exp is in seconds
     if (decodedToken.exp * 1000 < currentDate.getTime()) {
       console.log("Token expired.");
       setIsUser(false);
@@ -39,15 +39,13 @@ function App() {
 
   const ProtectedRoute = ({ user, children }) => {
     if (!user) {
-      toast.error("logged out");
+      toast.error("Please login");
       dispatch(logout());
       return <Navigate to="/login" replace />;
     }
 
     return children;
   };
-
-  useEffect(() => {}, [dispatch]);
 
   return (
     <>
