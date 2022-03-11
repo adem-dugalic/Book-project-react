@@ -1,18 +1,18 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import authorService from './authorService';
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import authorService from "./authorService";
 
 const initialState = {
   authors: [],
   isError: false,
   isSuccess: false,
   isLoading: false,
-  message: '',
+  message: "",
 };
 
 //Get authors
 
 export const getAuthors = createAsyncThunk(
-  'book/getAuthors',
+  "book/getAuthors",
   async (thunkAPI) => {
     try {
       return await authorService.getAuthors();
@@ -32,7 +32,7 @@ export const getAuthors = createAsyncThunk(
 //Create author
 
 export const createAuthor = createAsyncThunk(
-  'author/createAuthor',
+  "author/createAuthor",
   async (author, thunkAPI) => {
     try {
       const token = thunkAPI.getState().auth.user;
@@ -54,7 +54,7 @@ export const createAuthor = createAsyncThunk(
 //Get a single author
 
 export const getAuthor = createAsyncThunk(
-  'author/getAuthor',
+  "author/getAuthor",
   async (authorId, thunkAPI) => {
     try {
       return await authorService.getAuthor(authorId);
@@ -74,7 +74,7 @@ export const getAuthor = createAsyncThunk(
 //Edit a author
 // be careful with author in this example authors has id:id and data:{}
 export const editAuthor = createAsyncThunk(
-  'author/editAuthor',
+  "author/editAuthor",
   async (author, thunkAPI) => {
     try {
       const token = thunkAPI.getState().auth.user;
@@ -95,7 +95,7 @@ export const editAuthor = createAsyncThunk(
 //Delete a author
 
 export const deleteAuthor = createAsyncThunk(
-  'author/deleteAuthor',
+  "author/deleteAuthor",
   async (authorId, thunkAPI) => {
     try {
       const token = thunkAPI.getState().auth.user;
@@ -116,7 +116,7 @@ export const deleteAuthor = createAsyncThunk(
 //Get author authors
 
 export const getAuthorBooks = createAsyncThunk(
-  'author/getAuthorBooks',
+  "author/getAuthorBooks",
   async (authorId, thunkAPI) => {
     try {
       return await authorService.getAuthorBooks(authorId);
@@ -136,7 +136,7 @@ export const getAuthorBooks = createAsyncThunk(
 //Add author authors
 // here author has id:id and authors:[authors]
 export const addAuthorBooks = createAsyncThunk(
-  'author/addAuthorBooks',
+  "author/addAuthorBooks",
   async (author, thunkAPI) => {
     try {
       const token = thunkAPI.getState().auth.user;
@@ -158,7 +158,7 @@ export const addAuthorBooks = createAsyncThunk(
 //here author has idauthor and idAuthor
 
 export const deleteAuthorBook = createAsyncThunk(
-  'author/deleteAuthorBook',
+  "author/deleteAuthorBook",
   async (author, thunkAPI) => {
     try {
       const token = thunkAPI.getState().auth.user;
@@ -177,14 +177,14 @@ export const deleteAuthorBook = createAsyncThunk(
 );
 
 export const authorSlice = createSlice({
-  name: 'author',
+  name: "author",
   initialState,
   reducers: {
     reset: (state) => {
       state.isLoading = false;
       state.isError = false;
       state.isSuccess = false;
-      state.message = '';
+      state.message = "";
     },
   },
   extraReducers: (builder) => {
@@ -271,6 +271,20 @@ export const authorSlice = createSlice({
         state.authors = action.payload;
       })
       .addCase(addAuthorBooks.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload;
+        state.authors = null;
+      })
+      .addCase(deleteAuthorBook.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(deleteAuthorBook.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.authors = action.payload;
+      })
+      .addCase(deleteAuthorBook.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload;

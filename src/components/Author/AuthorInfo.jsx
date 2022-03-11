@@ -1,9 +1,9 @@
-import { toSafeInteger } from 'lodash';
-import { useEffect } from 'react';
-import { Fragment, useState } from 'react';
-import { AiOutlineDelete } from 'react-icons/ai';
-import { FiEdit } from 'react-icons/fi';
-import EditAuthorModal from './EditAuthorModal';
+import { toSafeInteger } from "lodash";
+import { useEffect } from "react";
+import { Fragment, useState } from "react";
+import { AiOutlineDelete } from "react-icons/ai";
+import { FiEdit } from "react-icons/fi";
+import EditAuthorModal from "./EditAuthorModal";
 
 function AuthorInfo(props) {
   const [modal, setModal] = useState(false);
@@ -17,22 +17,22 @@ function AuthorInfo(props) {
   return (
     <Fragment>
       <div className="relative text-center mt-10 mb-10 text-green-400 flex justify-center h-full">
-        <div className="relative w-1/2 h-full">
+        <div className="relative w-3/4 sm:w-1/2 h-full">
           <div className="relative w-full h-1/4 grid grid-cols-2">
             <div className="">
               <h2 className="text-3xl mt-3">
-                {props.data.firstName + ' ' + props.data.lastName}
+                {props.data.firstName + " " + props.data.lastName}
               </h2>
             </div>
-            <div className="">
+            <div className="flex ml-10 h-1/2 flex-col sm:flex-row sm:ml-0">
               <button
-                className="p-2 text-red-500 hover:bg-gray-600 bg-gray-700 rounded-2xl mr-5"
+                className="p-2 h-14 mt-3 w-14 text-red-500 hover:bg-gray-600 bg-gray-700 rounded-2xl mr-0 sm:mr-5"
                 onClick={() => props.deleteAnAuthor()}
               >
                 <AiOutlineDelete size={40} />
               </button>
               <button
-                className="p-2 text-cyan-500 hover:bg-gray-600 bg-gray-700 rounded-2xl"
+                className="p-2 h-14 mt-3 w-14 text-cyan-500 hover:bg-gray-600 bg-gray-700 rounded-2xl"
                 data-modal-toggle="defaultModal"
                 onClick={() => setModal(!modal)}
               >
@@ -42,19 +42,18 @@ function AuthorInfo(props) {
           </div>
           <div className="relative w-full h-full flex flex-col text-left text-xl">
             <p>
-              Date of birth:{' '}
+              Date of birth:{" "}
               <span className="text-white">{props.data.dob}</span>
             </p>
             <p>
-              Image url:{' '}
-              <span className="text-white">{props.data.image}</span>
+              Image url: <span className="text-white">{props.data.image}</span>
             </p>
             <p>
-              Books:{' '}
+              Books:{" "}
               {props.data.books?.map((item) => (
                 <span key={item.book.isbn} className="text-white">
                   <br />
-                  {'- '}
+                  {"- "}
                   {item.book.title}
                 </span>
               ))}
@@ -66,11 +65,11 @@ function AuthorInfo(props) {
         <EditAuthorModal
           id={props.id}
           setModal={setModal}
-          authors={props.data.books}
+          books={props.data.books}
           data={props.data}
         />
       ) : (
-        ''
+        ""
       )}
     </Fragment>
   );

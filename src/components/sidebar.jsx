@@ -1,15 +1,15 @@
 /* eslint-disable react-hooks/rules-of-hooks */
-import { Fragment } from 'react';
+import { Fragment } from "react";
 import {
   FaFirstOrder,
   FaSignInAlt,
   FaUser,
   FaSignOutAlt,
-} from 'react-icons/fa';
-import { TiDocumentAdd, TiUserAddOutline } from 'react-icons/ti';
-import { Link, useNavigate } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
-import { logout, reset } from '../features/auth/authSlice';
+} from "react-icons/fa";
+import { TiDocumentAdd, TiUserAddOutline } from "react-icons/ti";
+import { Link, useNavigate } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { logout, reset } from "../features/auth/authSlice";
 
 function sidebar() {
   const navigate = useNavigate();
@@ -19,8 +19,7 @@ function sidebar() {
   const onLogout = () => {
     dispatch(logout());
     dispatch(reset());
-    navigate('/login');
-    console.log('should work');
+    navigate("/login");
   };
 
   return (
@@ -85,14 +84,10 @@ const SideBarIcon = ({ icon, text, link }) => (
   <Link to={link}>
     <div className="sidebar-icon group">
       {icon}
-      <span className="sidebar-tooltip group-hover:scale-100">
-        {text}
-      </span>
+      <span className="sidebar-tooltip group-hover:scale-100">{text}</span>
     </div>
   </Link>
 );
 
-const Divider = () => (
-  <hr className="sidebar-hr bg-gray-900 border-0" />
-);
+const Divider = () => <hr className="sidebar-hr bg-gray-900 border-0" />;
 export default sidebar;

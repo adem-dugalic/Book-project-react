@@ -1,17 +1,17 @@
-import { useEffect } from 'react';
-import { useParams } from 'react-router';
-import { useNavigate } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
+import { useEffect } from "react";
+import { useParams } from "react-router";
+import { useNavigate } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
 import {
   createBook,
   deleteBook,
   getBook,
   reset,
-} from '../../features/books/bookSlice';
-import _ from 'lodash';
-import { toast } from 'react-toastify';
-import BookInfo from '../../components/Book/BookInfo';
-import Spinner from '../../components/Spinner';
+} from "../../features/books/bookSlice";
+import _ from "lodash";
+import { toast } from "react-toastify";
+import BookInfo from "../../components/Book/BookInfo";
+import Spinner from "../../components/Spinner";
 function Book() {
   const { id } = useParams();
   //For auth
@@ -19,9 +19,7 @@ function Book() {
   const { user } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
 
-  const book = useSelector((state) =>
-    _.find(state.book.books, { isbn: id })
-  );
+  const book = useSelector((state) => _.find(state.book.books, { isbn: id }));
 
   const {
     // book: books,
@@ -35,7 +33,7 @@ function Book() {
     if (isSuccess && message) toast.success(message);
     //For auth
     if (!user) {
-      navigate('/login');
+      navigate("/login");
     }
 
     if (!book) {
@@ -47,8 +45,8 @@ function Book() {
 
   const deleteABook = async () => {
     dispatch(deleteBook(id));
-    if (isSuccess) toast.success(message || 'Book deleted!');
-    navigate('/');
+    if (isSuccess) toast.success(message || "Book deleted!");
+    navigate("/");
   };
 
   if (isLoading) <Spinner />;

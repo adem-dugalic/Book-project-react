@@ -1,11 +1,12 @@
-import { useEffect } from 'react';
-import { useForm } from 'react-hook-form';
-import { useDispatch, useSelector } from 'react-redux';
+import { useEffect } from "react";
+import { useForm } from "react-hook-form";
+import { useDispatch, useSelector } from "react-redux";
 import {
   addBookAuthors,
+  deleteBookAuthor,
   editBook,
-} from '../features/books/bookSlice';
-import { getAuthors } from '../features/authors/authorSlice';
+} from "../features/books/bookSlice";
+import { getAuthors } from "../features/authors/authorSlice";
 function EditModal(props) {
   const {
     register,
@@ -14,8 +15,9 @@ function EditModal(props) {
     formState: { errors },
   } = useForm();
 
-  const { authors, isLoading, isError, isSuccess, message } =
-    useSelector((state) => state.author);
+  const { authors, isLoading, isError, isSuccess, message } = useSelector(
+    (state) => state.author
+  );
 
   useEffect(() => {
     if (!authors.length) dispatch(getAuthors());
@@ -24,13 +26,19 @@ function EditModal(props) {
   const dispatch = useDispatch();
 
   const onSubmit = (data) => {
-    console.log(data);
     if (data.title) {
       dispatch(editBook(data));
+      if (data.idAuthor.length)
+        dispatch(
+          addBookAuthors({
+            isbn: data.isbn,
+            idAuthors: { idAuthors: data.idAuthor },
+          })
+        );
       dispatch(
-        addBookAuthors({
-          isbn: data.isbn,
-          idAuthors: { idAuthors: data.idAuthor },
+        deleteBookAuthor({
+          idBook: data.isbn,
+          idAuthor: data.idAuthorRemove,
         })
       );
     }
@@ -81,7 +89,7 @@ function EditModal(props) {
             focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                 placeholder=""
                 required
-                {...register('title')}
+                {...register("title")}
               />
               <label
                 htmlFor="title"
@@ -104,7 +112,7 @@ function EditModal(props) {
             focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                 placeholder=" "
                 required
-                {...register('isbn')}
+                {...register("isbn")}
               />
               <label
                 htmlFor="isbn"
@@ -127,7 +135,7 @@ function EditModal(props) {
             dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                 placeholder=" "
                 required
-                {...register('image')}
+                {...register("image")}
               />
               <label
                 htmlFor="img"
@@ -151,7 +159,7 @@ function EditModal(props) {
               focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                   placeholder=" "
                   required
-                  {...register('pages')}
+                  {...register("pages")}
                 />
                 <label
                   htmlFor="pages"
@@ -174,7 +182,7 @@ function EditModal(props) {
               focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                   placeholder=" "
                   required
-                  {...register('published')}
+                  {...register("published")}
                 />
                 <label
                   htmlFor="published"
@@ -193,7 +201,30 @@ function EditModal(props) {
                   htmlFor="authors"
                   className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-400"
                 >
-                  Select authors
+                  Remove an Author
+                </label>
+                <select
+                  id="authorsR"
+                  name="authorsR"
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg 
+              focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700
+               dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 
+               dark:focus:border-blue-500"
+                  {...register("idAuthorRemove")}
+                >
+                  {props.authors?.map((item) => (
+                    <option value={item.author.id} key={item.author.id}>
+                      {item.author.firstName}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div className="relative z-0 mb-6 w-full group">
+                <label
+                  htmlFor="authors"
+                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-400"
+                >
+                  Add authors
                 </label>
                 <select
                   id="authors"
@@ -203,18 +234,8 @@ function EditModal(props) {
               focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700
                dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 
                dark:focus:border-blue-500"
-                  {...register('idAuthor')}
+                  {...register("idAuthor")}
                 >
-                  {props.authors?.map((item) => (
-                    <option
-                      value={item.author.id}
-                      key={item.author.id}
-                      selected
-                    >
-                      {item.author.firstName}
-                    </option>
-                  ))}
-
                   {authors?.map((item) => (
                     <option value={item.id} key={item.id}>
                       {item.firstName}
@@ -222,7 +243,6 @@ function EditModal(props) {
                   ))}
                 </select>
               </div>
-              <div className="relative z-0 mb-6 w-full group"></div>
             </div>
           </div>
           {/* <!-- Modal footer --> */}

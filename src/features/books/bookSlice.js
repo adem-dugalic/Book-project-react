@@ -1,38 +1,33 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import bookService from './bookService';
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import bookService from "./bookService";
 
 const initialState = {
   books: [],
   isError: false,
   isSuccess: false,
   isLoading: false,
-  message: '',
+  message: "",
 };
 
 //Get books
 
-export const getBooks = createAsyncThunk(
-  'book/getBooks',
-  async (thunkAPI) => {
-    try {
-      return await bookService.getBooks();
-    } catch (error) {
-      const message =
-        (error.response &&
-          error.response.data &&
-          error.response.data.message) ||
-        error.message ||
-        error.toString();
+export const getBooks = createAsyncThunk("book/getBooks", async (thunkAPI) => {
+  try {
+    return await bookService.getBooks();
+  } catch (error) {
+    const message =
+      (error.response && error.response.data && error.response.data.message) ||
+      error.message ||
+      error.toString();
 
-      return thunkAPI.rejectWithValue(message);
-    }
+    return thunkAPI.rejectWithValue(message);
   }
-);
+});
 
 //Create book
 
 export const createBook = createAsyncThunk(
-  'book/createBook',
+  "book/createBook",
   async (book, thunkAPI) => {
     try {
       const token = thunkAPI.getState().auth.user;
@@ -54,7 +49,7 @@ export const createBook = createAsyncThunk(
 //Get a single book
 
 export const getBook = createAsyncThunk(
-  'book/getBook',
+  "book/getBook",
   async (bookId, thunkAPI) => {
     try {
       return await bookService.getBook(bookId);
@@ -74,7 +69,7 @@ export const getBook = createAsyncThunk(
 //Edit a book
 // be careful with book in this example books has id:id and data:{}
 export const editBook = createAsyncThunk(
-  'book/editBook',
+  "book/editBook",
   async (book, thunkAPI) => {
     try {
       const token = thunkAPI.getState().auth.user;
@@ -95,7 +90,7 @@ export const editBook = createAsyncThunk(
 //Delete a book
 
 export const deleteBook = createAsyncThunk(
-  'book/deleteBook',
+  "book/deleteBook",
   async (bookId, thunkAPI) => {
     try {
       const token = thunkAPI.getState().auth.user;
@@ -116,7 +111,7 @@ export const deleteBook = createAsyncThunk(
 //Get book authors
 
 export const getBookAuthors = createAsyncThunk(
-  'book/getBookAuthors',
+  "book/getBookAuthors",
   async (bookId, thunkAPI) => {
     try {
       return await bookService.getBookAuthors(bookId);
@@ -136,7 +131,7 @@ export const getBookAuthors = createAsyncThunk(
 //Add book authors
 // here book has id:id and authors:[authors]
 export const addBookAuthors = createAsyncThunk(
-  'book/addBookAuthors',
+  "book/addBookAuthors",
   async (book, thunkAPI) => {
     try {
       const token = thunkAPI.getState().auth.user;
@@ -158,7 +153,7 @@ export const addBookAuthors = createAsyncThunk(
 //here book has idBook and idAuthor
 
 export const deleteBookAuthor = createAsyncThunk(
-  'book/deleteBookAuthor',
+  "book/deleteBookAuthor",
   async (book, thunkAPI) => {
     try {
       const token = thunkAPI.getState().auth.user;
@@ -177,14 +172,14 @@ export const deleteBookAuthor = createAsyncThunk(
 );
 
 export const bookSlice = createSlice({
-  name: 'book',
+  name: "book",
   initialState,
   reducers: {
     reset: (state) => {
       state.isLoading = false;
       state.isError = false;
       state.isSuccess = false;
-      state.message = '';
+      state.message = "";
     },
   },
   extraReducers: (builder) => {
@@ -271,6 +266,20 @@ export const bookSlice = createSlice({
         state.books = action.payload;
       })
       .addCase(addBookAuthors.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload;
+        state.books = null;
+      })
+      .addCase(deleteBookAuthor.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(deleteBookAuthor.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.books = action.payload;
+      })
+      .addCase(deleteBookAuthor.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload;

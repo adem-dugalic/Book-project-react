@@ -1,8 +1,8 @@
-import React from 'react';
-import { useDispatch } from 'react-redux';
-import { useForm } from 'react-hook-form';
-import { createBook } from '../features/books/bookSlice';
-import { toast } from 'react-toastify';
+import React from "react";
+import { useDispatch } from "react-redux";
+import { useForm } from "react-hook-form";
+import { createBook } from "../features/books/bookSlice";
+import { toast } from "react-toastify";
 
 function AddForm(props) {
   const {
@@ -16,11 +16,9 @@ function AddForm(props) {
 
   const onSubmit = (data) => {
     dispatch(createBook(data));
-    if (props.author.isSuccess) toast.success('Added a new book');
+    if (props.author.isSuccess) toast.success("Added a new book");
 
-    if (props.author.isError)
-      toast.error('Token expired or server error');
-    // console.log(data);
+    if (props.author.isError) toast.error("Token expired or server error");
   };
   return (
     <div className="w-3/4 mt-20">
@@ -35,7 +33,7 @@ function AddForm(props) {
             focus:outline-none focus:ring-0 focus:border-blue-600 peer"
             placeholder=""
             required
-            {...register('title')}
+            {...register("title")}
           />
           <label
             htmlFor="title"
@@ -57,7 +55,7 @@ function AddForm(props) {
             focus:outline-none focus:ring-0 focus:border-blue-600 peer"
             placeholder=" "
             required
-            {...register('isbn')}
+            {...register("isbn")}
           />
           <label
             htmlFor="isbn"
@@ -79,7 +77,7 @@ function AddForm(props) {
             dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
             placeholder=" "
             required
-            {...register('image')}
+            {...register("image")}
           />
           <label
             htmlFor="img"
@@ -102,7 +100,7 @@ function AddForm(props) {
               focus:outline-none focus:ring-0 focus:border-blue-600 peer"
               placeholder=" "
               required
-              {...register('pages')}
+              {...register("pages")}
             />
             <label
               htmlFor="pages"
@@ -124,7 +122,7 @@ function AddForm(props) {
               focus:outline-none focus:ring-0 focus:border-blue-600 peer"
               placeholder=" "
               required
-              {...register('published')}
+              {...register("published")}
             />
             <label
               htmlFor="published"
@@ -153,7 +151,7 @@ function AddForm(props) {
               focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700
                dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 
                dark:focus:border-blue-500"
-              {...register('idAuthor')}
+              {...register("idAuthor")}
             >
               {props.author.authors?.map((item) => (
                 <option value={item.id} key={item.id}>

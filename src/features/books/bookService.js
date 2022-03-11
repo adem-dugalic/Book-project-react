@@ -1,6 +1,6 @@
-import axios from 'axios';
+import axios from "axios";
 
-const API_URL = 'http://localhost:4000/books/';
+const API_URL = "http://localhost:4000/books/";
 
 //Get books
 const getBooks = async () => {
@@ -16,7 +16,6 @@ const createBook = async (book, token) => {
       Authorization: `Bearer ${token}`,
     },
   };
-  console.log(config);
   const response = await axios.post(API_URL, book, config);
   return response.data;
 };
@@ -36,11 +35,7 @@ const editBook = async (book, token) => {
       Authorization: `Bearer ${token}`,
     },
   };
-  const response = await axios.patch(
-    API_URL + `${book.isbn}`,
-    book,
-    config
-  );
+  const response = await axios.patch(API_URL + `${book.isbn}`, book, config);
   return response.data;
 };
 
@@ -66,7 +61,7 @@ const getBookAuthors = async (bookId) => {
 //Add book authors
 // here book has id:id and authors:[authors]
 const addBookAuthors = async (book, token) => {
-  console.log('in book service autors', book);
+  console.log("in book service autors", book);
   const config = {
     headers: {
       Authorization: `Bearer ${token}`,
@@ -89,7 +84,7 @@ const deleteBookAuthor = async (book, token) => {
     },
   };
   const response = await axios.delete(
-    API_URL + `/${book.idBook}/authors/${book.idAuthor}`,
+    API_URL + `${book.idBook}/authors/${book.idAuthor}`,
     config
   );
   return response.data;

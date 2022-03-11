@@ -3,41 +3,43 @@ import {
   Routes,
   Route,
   Navigate,
-} from 'react-router-dom';
-import { ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import Sidebar from './components/sidebar';
-import { MyRoutes, MyRoutesProtected } from './routes';
-import jwt_decode from 'jwt-decode';
-import { useDispatch } from 'react-redux';
-import { logout } from './features/auth/authSlice';
-import { useEffect } from 'react';
+} from "react-router-dom";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import Sidebar from "./components/sidebar";
+import { MyRoutes, MyRoutesProtected } from "./routes";
+import jwt_decode from "jwt-decode";
+import { useDispatch } from "react-redux";
+import { logout } from "./features/auth/authSlice";
+import { useEffect, useState } from "react";
 
 function App() {
-  let token = localStorage.getItem('user');
+  const [isUser, setIsUser] = useState(true);
+  const token = localStorage.getItem("user");
   const dispatch = useDispatch();
 
-  const guard = () => {
+  useEffect(() => {
     if (token) {
-      return false;
+      setIsUser(false);
     }
     console.log(token);
     let decodedToken = jwt_decode(token);
-    console.log('Decoded Token', decodedToken);
+    console.log("Decoded Token", decodedToken);
     let currentDate = new Date();
 
     // JWT exp is in seconds
     if (decodedToken.exp * 1000 < currentDate.getTime()) {
-      console.log('Token expired.');
-      return false;
+      console.log("Token expired.");
+      setIsUser(false);
     } else {
-      console.log('Valid token');
-      return true;
+      console.log("Valid token");
+      setIsUser(true);
     }
-  };
+  }, [isUser, setIsUser, dispatch, token]);
 
   const ProtectedRoute = ({ user, children }) => {
     if (!user) {
+      toast.error("logged out");
       dispatch(logout());
       return <Navigate to="/login" replace />;
     }
@@ -56,9 +58,7 @@ function App() {
             <Routes>
               {MyRoutes.map(({ path, component }, index) => {
                 const Page = component;
-                return (
-                  <Route key={index} path={path} element={<Page />} />
-                );
+                return <Route key={index} path={path} element={<Page />} />;
               })}
               {MyRoutesProtected.map(({ path, component }, index) => {
                 const Page = component;
@@ -67,7 +67,7 @@ function App() {
                     key={index}
                     path={path}
                     element={
-                      <ProtectedRoute user={guard}>
+                      <ProtectedRoute user={isUser}>
                         <Page />
                       </ProtectedRoute>
                     }

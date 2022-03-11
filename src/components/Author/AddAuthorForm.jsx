@@ -1,8 +1,8 @@
-import React from 'react';
-import { useDispatch } from 'react-redux';
-import { useForm } from 'react-hook-form';
-import { createAuthor } from '../../features/authors/authorSlice';
-import { toast } from 'react-toastify';
+import React from "react";
+import { useDispatch } from "react-redux";
+import { useForm } from "react-hook-form";
+import { createAuthor } from "../../features/authors/authorSlice";
+import { toast } from "react-toastify";
 
 function AddAuthorForm(props) {
   const {
@@ -15,19 +15,7 @@ function AddAuthorForm(props) {
   const dispatch = useDispatch();
 
   const onSubmit = (data) => {
-    console.log(data.idBook);
-    // if (!data.idBook.length) {
-    //   const newData = {
-    //     firstName: data.firstName,
-    //     lastName: data.lastName,
-    //     dob: data.dob,
-    //     image: data.image,
-    //   };
-
-    //   dispatch(createAuthor(newData));
-    // } else {
     dispatch(createAuthor(data));
-    // }
   };
   return (
     <div className="w-3/4 mt-20">
@@ -42,7 +30,7 @@ function AddAuthorForm(props) {
             focus:outline-none focus:ring-0 focus:border-blue-600 peer"
             placeholder=""
             required
-            {...register('firstName')}
+            {...register("firstName")}
           />
           <label
             htmlFor="firstName"
@@ -64,7 +52,7 @@ function AddAuthorForm(props) {
             focus:outline-none focus:ring-0 focus:border-blue-600 peer"
             placeholder=" "
             required
-            {...register('lastName')}
+            {...register("lastName")}
           />
           <label
             htmlFor="lastName"
@@ -86,7 +74,7 @@ function AddAuthorForm(props) {
             dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
             placeholder=" "
             required
-            {...register('dob')}
+            {...register("dob")}
           />
           <label
             htmlFor="dob"
@@ -109,7 +97,7 @@ function AddAuthorForm(props) {
               focus:outline-none focus:ring-0 focus:border-blue-600 peer"
               placeholder=" "
               required
-              {...register('image')}
+              {...register("image")}
             />
             <label
               htmlFor="image"
@@ -138,7 +126,7 @@ function AddAuthorForm(props) {
               focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700
                dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 
                dark:focus:border-blue-500"
-              {...register('idBook')}
+              {...register("idBook")}
             >
               {props.book.books?.map((item) => (
                 <option value={item.isbn} key={item.isbn}>

@@ -1,6 +1,6 @@
-import axios from 'axios';
+import axios from "axios";
 
-const API_URL = 'http://localhost:4000/authors/';
+const API_URL = "http://localhost:4000/authors/";
 
 //Get authors
 const getAuthors = async () => {
@@ -52,10 +52,7 @@ const deleteAuthor = async (authorId, token) => {
       Authorization: `Bearer ${token}`,
     },
   };
-  const response = await axios.delete(
-    API_URL + `${authorId}`,
-    config
-  );
+  const response = await axios.delete(API_URL + `${authorId}`, config);
   return response.data;
 };
 
@@ -69,7 +66,7 @@ const getAuthorBooks = async (authorId) => {
 //Add author book
 // check!!!!
 const addAuthorBooks = async (author, token) => {
-  console.log('in service of author books', author);
+  console.log("in service of author books", author);
   const config = {
     headers: {
       Authorization: `Bearer ${token}`,
@@ -92,7 +89,7 @@ const deleteAuthorBook = async (author, token) => {
     },
   };
   const response = await axios.delete(
-    API_URL + `/${author.idBook}/authors/${author.idAuthor}`,
+    API_URL + `${author.idAuthor}/books/${author.idBook}`,
     config
   );
   return response.data;
