@@ -9,6 +9,7 @@ const initialState = {
   isError: false,
   isSuccess: false,
   isLoading: false,
+  isAuthenticated: false,
   message: "",
 };
 
@@ -31,6 +32,10 @@ export const register = createAsyncThunk(
     }
   }
 );
+
+export const authUser = createAsyncThunk("authUser/register", (user) => {
+  return user;
+});
 
 //Login user
 
@@ -64,12 +69,16 @@ export const authSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
+      .addCase(authUser.fulfilled, (state, action) => {
+        state.isAuthenticated = action.payload;
+      })
       .addCase(register.pending, (state) => {
         state.isLoading = true;
       })
       .addCase(register.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isSuccess = true;
+        state.isAuthenticated = true;
         state.user = action.payload;
       })
       .addCase(register.rejected, (state, action) => {
@@ -84,6 +93,7 @@ export const authSlice = createSlice({
       .addCase(login.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isSuccess = true;
+        state.isAuthenticated = true;
         state.user = action.payload;
       })
       .addCase(login.rejected, (state, action) => {
@@ -94,6 +104,7 @@ export const authSlice = createSlice({
       })
       .addCase(logout.fulfilled, (state) => {
         state.user = null;
+        state.isAuthenticated = false;
       });
   },
 });

@@ -1,23 +1,23 @@
-import { useEffect } from 'react';
-import { useParams } from 'react-router';
-import { useNavigate } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
+import { useEffect } from "react";
+import { useParams } from "react-router";
+import { useNavigate } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
 import {
   createAuthor,
   deleteAuthor,
   getAuthor,
   reset,
-} from '../../features/authors/authorSlice';
-import _ from 'lodash';
-import { toast } from 'react-toastify';
-import AuthorInfo from '../../components/Author/AuthorInfo';
-import Spinner from '../../components/Spinner';
+} from "../../features/authors/authorSlice";
+import _ from "lodash";
+import { toast } from "react-toastify";
+import AuthorInfo from "../../components/Author/AuthorInfo";
+import Spinner from "../../components/Spinner";
 
 function Author() {
   const { id } = useParams();
   //For auth
   const navigate = useNavigate();
-  const { user } = useSelector((state) => state.auth);
+  // const { user } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
 
   const author = useSelector((state) =>
@@ -35,21 +35,21 @@ function Author() {
   useEffect(() => {
     if (isSuccess && message) toast.success(message);
     //For auth
-    if (!user) {
-      navigate('/login');
-    }
+    // if (!user) {
+    //   navigate('/login');
+    // }
 
     if (!author) {
       dispatch(getAuthor(id));
     }
 
     dispatch(reset());
-  }, [user, navigate, dispatch, id, author]);
+  }, [navigate, dispatch, id, author]);
 
   const deleteAnAuthor = async () => {
     dispatch(deleteAuthor(id));
-    if (isSuccess) toast.success(message || 'Author deleted!');
-    navigate('/');
+    if (isSuccess) toast.success(message || "Author deleted!");
+    navigate("/");
   };
 
   if (isLoading) <Spinner />;

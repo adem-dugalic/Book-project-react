@@ -9,13 +9,13 @@ import { toast } from "react-toastify";
 function AddAuthor() {
   const book = useSelector((state) => state.book);
   const dispatch = useDispatch();
-  const navigate = useNavigate();
-  const { user } = useSelector((state) => state.auth);
+  // const navigate = useNavigate();
+  // const { user } = useSelector((state) => state.auth);
 
   useEffect(() => {
-    if (!user) {
-      navigate("/login");
-    }
+    // if (!user) {
+    //   navigate("/login");
+    // }
     if (book.isError) {
       toast.error(book.message);
     }

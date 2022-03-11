@@ -16,7 +16,7 @@ function Book() {
   const { id } = useParams();
   //For auth
   const navigate = useNavigate();
-  const { user } = useSelector((state) => state.auth);
+  // const { user } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
 
   const book = useSelector((state) => _.find(state.book.books, { isbn: id }));
@@ -32,16 +32,16 @@ function Book() {
   useEffect(() => {
     if (isSuccess && message) toast.success(message);
     //For auth
-    if (!user) {
-      navigate("/login");
-    }
+    // if (!user) {
+    //   navigate("/login");
+    // }
 
     if (!book) {
       dispatch(getBook(id));
     }
 
     dispatch(reset());
-  }, [user, navigate, dispatch, id, book]);
+  }, [navigate, dispatch, id, book]);
 
   const deleteABook = async () => {
     dispatch(deleteBook(id));

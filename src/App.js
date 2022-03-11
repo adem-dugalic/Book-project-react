@@ -3,42 +3,38 @@ import {
   Routes,
   Route,
   Navigate,
+  useNavigate,
 } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Sidebar from "./components/sidebar";
 import { MyRoutes, MyRoutesProtected } from "./routes";
 import jwt_decode from "jwt-decode";
-import { useDispatch } from "react-redux";
-import { logout } from "./features/auth/authSlice";
-import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { authUser, logout } from "./features/auth/authSlice";
+import { useEffect } from "react";
 
 function App() {
-  const [isUser, setIsUser] = useState(true);
-  let token = localStorage.getItem("user");
   const dispatch = useDispatch();
+  const { isAuthenticated } = useSelector((state) => state.auth);
 
-  useEffect(() => {
-    if (token) {
-      setIsUser(false);
-    }
-    console.log(token);
-    let decodedToken = jwt_decode(token);
-    console.log("Decoded Token", decodedToken);
-    let currentDate = new Date();
-
-    //JWT exp is in seconds
-    if (decodedToken.exp * 1000 < currentDate.getTime()) {
-      console.log("Token expired.");
-      setIsUser(false);
+  const ProtectedRoute = ({ children }) => {
+    let token = localStorage.getItem("user");
+    if (!token) {
+      dispatch(authUser(false));
     } else {
-      console.log("Valid token");
-      setIsUser(true);
+      let decodedToken = jwt_decode(token);
+      let currentDate = new Date();
+      //JWT exp is in seconds
+      if (decodedToken.exp * 1000 < currentDate.getTime()) {
+        dispatch(authUser(false));
+      } else {
+        dispatch(authUser(true));
+      }
     }
-  }, [isUser, setIsUser, dispatch, token]);
 
-  const ProtectedRoute = ({ user, children }) => {
-    if (!user) {
+    if (!isAuthenticated) {
+      console.log(1);
       toast.error("Please login");
       dispatch(logout());
       return <Navigate to="/login" replace />;
@@ -65,7 +61,7 @@ function App() {
                     key={index}
                     path={path}
                     element={
-                      <ProtectedRoute user={isUser}>
+                      <ProtectedRoute>
                         <Page />
                       </ProtectedRoute>
                     }
